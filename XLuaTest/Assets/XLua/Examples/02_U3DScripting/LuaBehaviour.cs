@@ -46,11 +46,15 @@ public class LuaBehaviour : MonoBehaviour {
     /// </summary>
     private LuaTable scriptEnv;
 
+   public void Test()
+    {
+        Debug.Log("测试lua脚本中调用c#脚本的方法");
+    }
     void Awake()
     {
 
         //  File fs = new File(Application.dataPath+ "XLua/Examples/02_U3DScripting/LuaTestScript.lua.text");
-        luaScriptContext = File.ReadAllText(Application.dataPath + "/XLua/Examples/02_U3DScripting/LuaTestScript.lua.txt");
+       // luaScriptContext = File.ReadAllText(Application.dataPath + "/XLua/Examples/02_U3DScripting/LuaTestScript.lua.txt");
         //luaScript = ()fs.BaseStr;
          scriptEnv = luaEnv.NewTable();
         print("aa");
@@ -66,7 +70,7 @@ public class LuaBehaviour : MonoBehaviour {
             scriptEnv.Set(injection.name, injection.value);
         }
 
-        luaEnv.DoString(/*luaScript.text*/luaScriptContext, "LuaBehaviour", scriptEnv);
+        luaEnv.DoString(luaScript.text/*luaScriptContext*/, "LuaBehaviour", scriptEnv);
 
         Action luaAwake = scriptEnv.Get<Action>("awake");
         scriptEnv.Get("start", out luaStart);

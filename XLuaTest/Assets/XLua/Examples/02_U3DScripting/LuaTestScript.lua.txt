@@ -6,12 +6,16 @@
 
 local speed = 10
 local lightCpnt = nil
+local monoObj=nil
 
 function start()
 	print("lua start...")
 	print("injected object", lightObject)
 	print("self",self.name)
+	monoObj=self:GetComponent(typeof(CS.LuaBehaviour))
+	
 	lightCpnt= lightObject:GetComponent(typeof(CS.UnityEngine.Light))
+	monoObj:Test()
 end
 
 function update()
