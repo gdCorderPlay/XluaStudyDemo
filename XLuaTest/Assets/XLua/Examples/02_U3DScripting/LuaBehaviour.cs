@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using XLua;
 using System;
-
+using System.IO;
 [System.Serializable]
 public class Injection
 {
@@ -21,23 +21,39 @@ public class Injection
 
 [LuaCallCSharp]
 public class LuaBehaviour : MonoBehaviour {
+    /// <summary>
+    /// lua 脚本文件
+    /// </summary>
     public TextAsset luaScript;
-    public Injection[] injections;
 
+    private string luaScriptContext;
+    
+    public Injection[] injections;
+    /// <summary>
+    /// lua 虚拟机
+    /// </summary>
     internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
     internal static float lastGCTime = 0;
     internal const float GCInterval = 1;//1 second 
-
+    /// <summary>
+    /// 方法
+    /// </summary>
     private Action luaStart;
     private Action luaUpdate;
     private Action luaOnDestroy;
-
+    /// <summary>
+    /// lua脚本对象
+    /// </summary>
     private LuaTable scriptEnv;
 
     void Awake()
     {
-        scriptEnv = luaEnv.NewTable();
 
+        //  File fs = new File(Application.dataPath+ "XLua/Examples/02_U3DScripting/LuaTestScript.lua.text");
+        luaScriptContext = File.ReadAllText(Application.dataPath + "/XLua/Examples/02_U3DScripting/LuaTestScript.lua.txt");
+        //luaScript = ()fs.BaseStr;
+         scriptEnv = luaEnv.NewTable();
+        print("aa");
         // 为每个脚本设置一个独立的环境，可一定程度上防止脚本间全局变量、函数冲突
         LuaTable meta = luaEnv.NewTable();
         meta.Set("__index", luaEnv.Global);
@@ -50,7 +66,7 @@ public class LuaBehaviour : MonoBehaviour {
             scriptEnv.Set(injection.name, injection.value);
         }
 
-        luaEnv.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        luaEnv.DoString(/*luaScript.text*/luaScriptContext, "LuaBehaviour", scriptEnv);
 
         Action luaAwake = scriptEnv.Get<Action>("awake");
         scriptEnv.Get("start", out luaStart);

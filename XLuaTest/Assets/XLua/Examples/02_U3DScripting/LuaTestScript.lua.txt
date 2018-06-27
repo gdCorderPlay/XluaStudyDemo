@@ -10,6 +10,7 @@ local lightCpnt = nil
 function start()
 	print("lua start...")
 	print("injected object", lightObject)
+	print("self",self.name)
 	lightCpnt= lightObject:GetComponent(typeof(CS.UnityEngine.Light))
 end
 

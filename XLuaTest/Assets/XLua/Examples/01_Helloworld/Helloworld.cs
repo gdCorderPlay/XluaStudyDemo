@@ -13,10 +13,34 @@ public class Helloworld : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         LuaEnv luaenv = new LuaEnv();
-        luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
+        //luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
+       // luaenv.DoString("CS.UnityEngine.Debug.Log('gd')");
+       // luaenv.DoString("DoTest()");
+       
         luaenv.Dispose();
+        //Debug.Log('a');
 	}
-	
+
+    /// <summary>
+    /// 球
+    /// </summary>
+    Transform ball;
+    /// <summary>
+    /// 鼠标
+    /// </summary>
+    Transform qidian;
+    /// <summary>
+    /// 指向结束点
+    /// </summary>
+    Transform end;
+    void DOTest()
+    {
+        // Debug.Log("test function");
+
+        end.position = ball.position + (ball.position - qidian.position);
+         
+
+    }
 	// Update is called once per frame
 	void Update () {
 	
