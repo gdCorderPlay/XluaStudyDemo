@@ -1531,6 +1531,8 @@ namespace CSObjectWrapEditor
         public static void GenAll()
         {
             var start = DateTime.Now;
+
+           // UnityEngine.Debug.Log(GeneratorConfig.common_path);
             Directory.CreateDirectory(GeneratorConfig.common_path);
             GetGenConfig(XLua.Utils.GetAllTypes());
             luaenv.DoString("require 'TemplateCommon'");

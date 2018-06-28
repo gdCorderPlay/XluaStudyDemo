@@ -38,6 +38,7 @@ namespace XLua
                 var ca_type = ca.GetType();
                 if (ca_type.ToString() == "XLua.HotfixAttribute")
                 {
+                   
                     return (int)(ca_type.GetProperty("Flag").GetValue(ca, null));
                 }
             }
@@ -1576,17 +1577,18 @@ namespace XLua
 
             var assembly_csharp_path = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
             var id_map_file_path = CSObjectWrapEditor.GeneratorConfig.common_path + "Resources/hotfix_id_map.lua.txt";
+           // UnityEngine.Debug.Log(id_map_file_path);
             var hotfix_cfg_in_editor = CSObjectWrapEditor.GeneratorConfig.common_path + "hotfix_cfg_in_editor.data";
-
+         
             Dictionary<string, int> editor_cfg = new Dictionary<string, int>();
             Assembly editor_assembly = typeof(Hotfix).Assembly;
             HotfixConfig.GetConfig(editor_cfg, Utils.GetAllTypes().Where(t => t.Assembly == editor_assembly));
-
+         //   UnityEngine.Debug.Log(CSObjectWrapEditor.GeneratorConfig.common_path);
             if (!Directory.Exists(CSObjectWrapEditor.GeneratorConfig.common_path))
             {
                 Directory.CreateDirectory(CSObjectWrapEditor.GeneratorConfig.common_path);
             }
-			
+           // UnityEngine.Debug.Log(hotfix_cfg_in_editor);
             using (BinaryWriter writer = new BinaryWriter(new FileStream(hotfix_cfg_in_editor, FileMode.Create, FileAccess.Write)))
             {
                 writer.Write(editor_cfg.Count);
@@ -1621,6 +1623,8 @@ namespace XLua
                 {
                     var injectAssemblyFileName = Path.GetFileName(injectAssemblyPath);
                     args[3] = CSObjectWrapEditor.GeneratorConfig.common_path + "Resources/hotfix_id_map_" + injectAssemblyFileName.Substring(0, injectAssemblyFileName.Length - 4) + ".lua.txt";
+
+                    //UnityEngine.Debug.Log(CSObjectWrapEditor.GeneratorConfig.common_path + "Resources/hotfix_id_map_" + injectAssemblyFileName.Substring(0, injectAssemblyFileName.Length - 4) + ".lua.txt");
                     idMapFileNames.Add(args[3]);
                 }
                 Process hotfix_injection = new Process();
@@ -1633,6 +1637,7 @@ namespace XLua
                 hotfix_injection.Start();
                 UnityEngine.Debug.Log(hotfix_injection.StandardOutput.ReadToEnd());
                 hotfix_injection.WaitForExit();
+              
             }
 
             File.Delete(hotfix_cfg_in_editor);

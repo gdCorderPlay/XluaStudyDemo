@@ -10,10 +10,22 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using XLua;
+using System.Reflection;
+using System.Linq;
 
 //配置的详细介绍请看Doc下《XLua的配置.doc》
 public static class ExampleGenConfig
 {
+    //[Hotfix]
+    //public static List<Type> by_property
+    //{
+    //    get
+    //    {
+    //        return (from type in Assembly.GetExecutingAssembly().GetTypes()
+    //                where type.Namespace == "hotfix"
+    //                select type).ToList();
+    //    }
+    //}
     //lua中要使用到C#库的配置，比如C#标准库，或者Unity API，第三方库等。
     [LuaCallCSharp]
     public static List<Type> LuaCallCSharp = new List<Type>() {
@@ -46,7 +58,10 @@ public static class ExampleGenConfig
                 typeof(Mathf),
                 typeof(System.Collections.Generic.List<int>),
                 typeof(Action<string>),
-                typeof(UnityEngine.Debug)
+                typeof(UnityEngine.Debug),
+                     typeof(hotfix.HotfixTest)
+
+
             };
 
     //C#静态调用Lua的配置（包括事件的原型），仅可以配delegate，interface
@@ -57,7 +72,8 @@ public static class ExampleGenConfig
                 typeof(Action<string>),
                 typeof(Action<double>),
                 typeof(UnityEngine.Events.UnityAction),
-                typeof(System.Collections.IEnumerator)
+                typeof(System.Collections.IEnumerator),
+                  typeof(hotfix.HotfixTest)
             };
 
     //黑名单
