@@ -1,17 +1,33 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using XLua;
 //namespace hotfix
 
-   [Hotfix]
+[Hotfix]
     public class HotfixTest : MonoBehaviour
     {
         LuaEnv luaenv = new LuaEnv();
 
+    public TextAsset luaScript;
         private int tick = 0;
 
         // Use this for initialization
         void Start()
         {
+        ///添加loader
+    
+         luaenv.AddLoader( (ref string filepath) =>
+        {
+            filepath = Application.dataPath + "/XLua/Examples/08_Hotfix/" + filepath.Replace('.', '/') + ".lua";
+            if (File.Exists(filepath))
+            {
+                return File.ReadAllBytes(filepath);
+            }
+            else
+            {
+                return null;
+            }
+        });
         }
 
         // Update is called once per frame
@@ -33,19 +49,21 @@ using XLua;
         {
             if (GUI.Button(new Rect(10, 10, 300, 80), "Hotfix"))
             {
-                luaenv.DoString(@"
+            //    luaenv.DoString(@"
 
-                xlua.hotfix(CS.HotfixTest, 'Update', function(self)
-                    self.tick = self.tick + 1
-                    if (self.tick % 50) == 0 then
-                      print('<<<<<<<<Update in lua, tick = ' .. self.tick )
-                    end
-                end)
-            ");
-                //luaenv.DoString(@"
-                //   print('<<<<<<<<Update in lua, tick = ' )
-                // ");
-            }
+            //    xlua.hotfix(CS.HotfixTest, 'Update', function(self)
+            //        self.tick = self.tick + 1
+            //       if (self.tick % 50) == 0 then
+            //        -- print('<<<<<<<<Update in lua, tick = ' .. self.tick )
+            //         print('gd')
+            //        end
+
+            //    end)
+            //");
+                luaenv.DoString(luaScript.text);
+
+
+        }
 
             string chHint = @"在运行该示例之前，请细致阅读xLua文档，并执行以下步骤：
 
