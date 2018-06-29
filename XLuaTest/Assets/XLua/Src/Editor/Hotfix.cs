@@ -1567,6 +1567,8 @@ namespace XLua
 #elif UNITY_EDITOR_WIN
             var mono_path = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
                 "Data/MonoBleedingEdge/bin/mono.exe");
+          //  UnityEngine.Debug.Log(mono_path);
+            
 #endif
             var inject_tool_path = "./Tools/XLuaHotfixInject.exe";
             if (!File.Exists(inject_tool_path))
@@ -1576,6 +1578,7 @@ namespace XLua
             }
 
             var assembly_csharp_path = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
+            //D:/Study/GD/XluaStudyDemo/XLuaTest/Assets/XLua/Gen/Resources/hotfix_id_map.lua.txt
             var id_map_file_path = CSObjectWrapEditor.GeneratorConfig.common_path + "Resources/hotfix_id_map.lua.txt";
            // UnityEngine.Debug.Log(id_map_file_path);
             var hotfix_cfg_in_editor = CSObjectWrapEditor.GeneratorConfig.common_path + "hotfix_cfg_in_editor.data";
@@ -1592,10 +1595,12 @@ namespace XLua
             using (BinaryWriter writer = new BinaryWriter(new FileStream(hotfix_cfg_in_editor, FileMode.Create, FileAccess.Write)))
             {
                 writer.Write(editor_cfg.Count);
+              //  UnityEngine.Debug.Log("editor_cfg.Count"+editor_cfg.Count);
                 foreach(var kv in editor_cfg)
                 {
                     writer.Write(kv.Key);
                     writer.Write(kv.Value);
+                  //  UnityEngine.Debug.Log(kv.Key + kv.Value);
                 }
             }
 
@@ -1639,9 +1644,9 @@ namespace XLua
                 hotfix_injection.WaitForExit();
               
             }
-
-            File.Delete(hotfix_cfg_in_editor);
             AssetDatabase.Refresh();
+            File.Delete(hotfix_cfg_in_editor);
+        
         }
     }
 }

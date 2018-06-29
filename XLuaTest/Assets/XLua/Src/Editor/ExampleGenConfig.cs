@@ -58,8 +58,7 @@ public static class ExampleGenConfig
                 typeof(Mathf),
                 typeof(System.Collections.Generic.List<int>),
                 typeof(Action<string>),
-                typeof(UnityEngine.Debug),
-                     typeof(hotfix.HotfixTest)
+                typeof(UnityEngine.Debug)
 
 
             };
@@ -72,8 +71,7 @@ public static class ExampleGenConfig
                 typeof(Action<string>),
                 typeof(Action<double>),
                 typeof(UnityEngine.Events.UnityAction),
-                typeof(System.Collections.IEnumerator),
-                  typeof(hotfix.HotfixTest)
+                typeof(System.Collections.IEnumerator)
             };
 
     //黑名单
