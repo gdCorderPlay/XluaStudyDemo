@@ -66,6 +66,7 @@ public class CSCallLua : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        
         luaenv = new LuaEnv();
         luaenv.DoString(script);
 

@@ -4,9 +4,15 @@ using UnityEngine;
 using UnityEditor;
 public class CSharpCallBat :Editor {
     
-    [MenuItem("GD/IO/CSharpCallOutProgram")]
+    [MenuItem("GD/IO/CSharpCallOutExe")]
     public static void CSharpCallOutProgram()
     {
+        //   C: \Users\Administrator\Documents\Visual Studio 2015\Projects\test1\test1\bin\Debug
+        // System.Diagnostics.Process.Start("C:\\Windows\\system32\\calc.exe");
+        string[] strs = new string[] { "gd", "123", "over" };
+        System.Diagnostics.Process task=   System.Diagnostics.Process.Start(@"D:\Root\test1.exe", "1 2 3");
+        task.WaitForExit();
+        Debug.Log(task.ExitCode);
        // ExecuteProgram();
     }
     /// <summary>
@@ -29,7 +35,9 @@ public class CSharpCallBat :Editor {
 
         try
         {
-            task = System.Diagnostics.Process.Start(info);
+             task = System.Diagnostics.Process.Start(info);
+           // C:\Windows\system32
+           // task = System.Diagnostics.Process.Start("C:\\Windows\\system32\\calc.exe");
             if (task != null)
             {
                 task.WaitForExit(10000);

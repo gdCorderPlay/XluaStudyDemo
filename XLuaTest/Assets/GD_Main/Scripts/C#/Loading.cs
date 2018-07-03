@@ -11,8 +11,9 @@ public class Loading : MonoBehaviour {
 
 	IEnumerator  Start ()
     {
-      //  WWW download = WWW.LoadFromCacheOrDownload("file://" + Application.dataPath + "/GD_Main/BundleAsset/prefab/cube.txt", 1);
-        WWW download = WWW. LoadFromCacheOrDownload("http://localhost/HotfixAsset/cube.txt",1);
+        //  WWW download = WWW.LoadFromCacheOrDownload("file://" + Application.dataPath + "/GD_Main/BundleAsset/prefab/cube.txt", 1);
+        // WWW download = WWW. LoadFromCacheOrDownload("http://localhost/HotfixAsset/cube.txt",1);
+        WWW download = new WWW("http://localhost/HotfixAsset/cube.txt");
         yield return download;
         ///cube.modle
         bundle = download.assetBundle;
@@ -26,7 +27,7 @@ public class Loading : MonoBehaviour {
 
         GameObject instanceObj = Instantiate(obj);
 
-       //StartCoroutine(loadasset("http://localhost/HotfixAsset/cube.txt")) ;
+       StartCoroutine(loadasset("http://localhost/HotfixAsset/Version.txt")) ;
     }
     //写入模型到本地
     IEnumerator loadasset(string url)
@@ -39,7 +40,7 @@ public class Loading : MonoBehaviour {
             byte[] model = w.bytes;
             int length = model.Length;
             //写入模型到本地
-            CreateModelFile(Application.streamingAssetsPath, "asset/cube.txt", model, length);
+            CreateModelFile(Application.dataPath+ "/Version", "Version.txt", model, length);
         }
     }
 
@@ -48,7 +49,11 @@ public class Loading : MonoBehaviour {
         //文件流信息
         //StreamWriter sw;
         Stream sw;
-        FileInfo t = new FileInfo(path + "/" + name);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        FileInfo t = new FileInfo(path +"/"+ name);
         if (!t.Exists)
         {
             //如果此文件不存在则创建
@@ -57,7 +62,7 @@ public class Loading : MonoBehaviour {
         else
         {
             //如果此文件存在则打开
-           // sw = t.Open(FileMode.CreateNew);
+            sw = t.Open(FileMode.CreateNew);
             return;
         }
         //以行的形式写入信息
@@ -67,6 +72,8 @@ public class Loading : MonoBehaviour {
         sw.Close();
         //销毁流
         sw.Dispose();
+     UnityEditor. AssetDatabase.Refresh();
+        Debug.Log("Download Success!!!!!");
     }
 
     /**
