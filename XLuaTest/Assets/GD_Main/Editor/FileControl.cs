@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using System.Text;
 /// <summary>
 /// 文件操作控制类
 /// </summary>
@@ -136,6 +137,7 @@ public static class FileControl  {
      /// </summary>
    public static bool HaveMessage(this StreamReader sr,out string message)
     {
+
         message = sr.ReadLine();
         if (message==null)
         {
@@ -151,7 +153,14 @@ public static class FileControl  {
     {
 
         //loadasset("http://localhost/HotfixAsset/cube.txt");
-
+        EmptyMono mono = GameObject.FindObjectOfType<EmptyMono>();
+        if(!mono)
+        {
+            GameObject obj = new GameObject("Mono");
+             mono = obj.AddComponent<EmptyMono>();
+        }
+        //"http://localhost/HotfixAsset/Version.txt"
+        mono.StartCoroutine(ParseVersion( "Version.txt"));
     }
    static IEnumerator loadasset(string url)
     {
@@ -171,6 +180,10 @@ public static class FileControl  {
         //文件流信息
         //StreamWriter sw;
         Stream sw;
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
         FileInfo t = new FileInfo(path + "/" + name);
         if (!t.Exists)
         {
@@ -180,7 +193,7 @@ public static class FileControl  {
         else
         {
             //如果此文件存在则打开
-            // sw = t.Open(FileMode.CreateNew);
+             sw = t.Open(FileMode.CreateNew);
             return;
         }
         //以行的形式写入信息
@@ -190,5 +203,125 @@ public static class FileControl  {
         sw.Close();
         //销毁流
         sw.Dispose();
+    }
+    /// <summary>
+    /// 解析文本 获取资源的路径和MD5值
+    /// </summary>
+    static IEnumerator ParseVersion( string path ,System.Action action=null)
+    {
+        ///获取服务器上的版本信息
+        string serverPath = "http://localhost/HotfixAsset/" + path;
+        WWW www = new WWW(serverPath);
+        yield return www;
+        byte[] data=  www.bytes;
+        string str = System.Text.Encoding.UTF8.GetString(data);
+        Dictionary<string,string> ServerVersionInfo=ParseTextToDictionary(str);
+
+        //解析本地的版本信息
+        string localPath = "file://"+Application.dataPath+"/Server/Version/"+ path;
+        www = new WWW(localPath);
+        yield return www;
+       data = www.bytes;
+       str = System.Text.Encoding.UTF8.GetString(data);
+        Dictionary<string, string> LocalVersionInfo = ParseTextToDictionary(str);
+
+        //比较差异 找到需要更新的文件
+        List<string> needUpdateAsset = new List<string>();
+        foreach(string key in ServerVersionInfo.Keys)
+        {
+            //当本地资源不存在 或者本地资源和服务器的资源不相同时记录下资源路径
+            if (!LocalVersionInfo.ContainsKey(key)|| !ServerVersionInfo[key].Contains(LocalVersionInfo[key]))
+            {
+                needUpdateAsset.Add(key);
+            }
+        }
+        string serverRoot= "http://localhost/HotfixAsset/Asset/";
+        string localRoot =  Application.dataPath + "/Server/Asset/";
+      
+        //更新资源
+        for (int i=0;i<needUpdateAsset.Count;i++)
+        {
+            WWW w = new WWW(serverRoot+needUpdateAsset[i]);
+            yield return w;
+            if (w.isDone)
+            {
+                byte[] model = w.bytes;
+                int length = model.Length;
+                //写入模型到本地
+                CreateModelFile(localRoot+ needUpdateAsset[i], model, length);
+            }
+        }
+        www = new WWW("http://localhost/HotfixAsset/" + path);
+        yield return www;
+        if (www.isDone)
+        {
+            byte[] model = www.bytes;
+            int length = model.Length;
+            //写入模型到本地
+            CreateModelFile(Application.dataPath + "/Server/Version/" + path, model, length);
+        }
+        AssetDatabase.Refresh();
+        Debug.Log("Update Asset Success!!!");
+    }
+    /// <summary>
+    /// 根据文件的路径名称 创建文件 如果路径不存在就创建路径
+    /// </summary>
+    static void CreateModelFile(string path, byte[] info, int length)
+    {
+        //文件流信息
+        //StreamWriter sw;
+        Stream sw;
+        string[] paths = path.Split('/', '\\');
+        string remove = paths[paths.Length - 1];
+        string directory = path.Remove(path.Length-remove.Length-1,remove.Length+1);
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        FileInfo t = new FileInfo(path);
+        if (!t.Exists)
+        {
+            //如果此文件不存在则创建
+            sw = t.Create();
+
+        }
+        else
+        {
+            //如果此文件存在则打开
+            sw = t.Open(FileMode.Open);
+           
+        }
+        //以行的形式写入信息
+        //sw.WriteLine(info);
+        sw.Write(info, 0, length);
+        //关闭流
+        sw.Close();
+        //销毁流
+        sw.Dispose();
+       // Debug.Log("成功创建文件：" + path);
+    }
+    /// <summary>
+    /// 解析文本文档 并返回一个资源路径和资源MD5 的键值对
+    /// </summary>
+    static Dictionary<string,string> ParseTextToDictionary(string context)
+    {
+        Dictionary<string, string> pathAndMD5 = new Dictionary<string, string>();
+        string[] paths = context.Split('\n');
+        for (int i = 0; i < paths.Length; i++)
+        {
+            string keyAndValue = paths[i].Trim();
+           // Debug.Log(keyAndValue);
+            if (!string.IsNullOrEmpty(keyAndValue))
+            {
+               
+                
+                    string assetPath = keyAndValue.Split('|')[0];
+                    string MD5 = keyAndValue.Split('|')[1];
+                    pathAndMD5.Add(assetPath, MD5);
+                
+            }
+        }
+       // Debug.Log("Parse Success!!! You have get the key and value with assetpath and MD5!!!");
+        return pathAndMD5;
     }
 }

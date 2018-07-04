@@ -69,7 +69,18 @@ public class LuaBehaviour : MonoBehaviour {
         {
             scriptEnv.Set(injection.name, injection.value);
         }
-
+        luaEnv.AddLoader((ref string filepath) =>
+        {
+            filepath = Application.dataPath + "/XLua/Examples/08_Hotfix/" + filepath.Replace('.', '/') + ".lua";
+            if (File.Exists(filepath))
+            {
+                return File.ReadAllBytes(filepath);
+            }
+            else
+            {
+                return null;
+            }
+        });
         luaEnv.DoString(luaScript.text/*luaScriptContext*/, "LuaBehaviour", scriptEnv);
 
         Action luaAwake = scriptEnv.Get<Action>("awake");
