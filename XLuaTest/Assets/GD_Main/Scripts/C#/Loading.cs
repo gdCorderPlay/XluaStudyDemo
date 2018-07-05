@@ -7,7 +7,7 @@ using System.Text;
 /// 加载场景信息资源
 /// </summary>
 public class Loading : MonoBehaviour {
-    public AssetBundle bundle;
+     AssetBundle bundle;
 
 	IEnumerator  Start ()
     {
@@ -72,8 +72,10 @@ public class Loading : MonoBehaviour {
         sw.Close();
         //销毁流
         sw.Dispose();
-     UnityEditor. AssetDatabase.Refresh();
+#if UNITY_EDITOR
+        UnityEditor. AssetDatabase.Refresh();
         Debug.Log("Download Success!!!!!");
+#endif
     }
 
     /**

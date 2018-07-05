@@ -53,7 +53,8 @@
 	</assembly>
 
 	<assembly fullname="Assembly-CSharp">
-	    <type fullname="LuaBehaviour" preserve="all"/>
+	    <type fullname="Helloworld" preserve="all"/>
+		<type fullname="LuaBehaviour" preserve="all"/>
 		<type fullname="XLuaTest.Pedding" preserve="all"/>
 		<type fullname="XLuaTest.MyStruct" preserve="all"/>
 		<type fullname="XLuaTest.MyEnum" preserve="all"/>
