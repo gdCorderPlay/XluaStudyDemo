@@ -1,0 +1,2 @@
+print('gd')
+self.transform:Rotate(CS.UnityEngine.Vector3.up)

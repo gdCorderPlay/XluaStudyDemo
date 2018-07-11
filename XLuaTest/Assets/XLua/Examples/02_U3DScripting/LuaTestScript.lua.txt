@@ -7,20 +7,22 @@ require 'LuaForCSharp'
 local speed = 10
 local lightCpnt = nil
 local monoObj=nil
-
+local data=nil
 function start()
 	print("lua start...")
 	print("injected object", lightObject)
 	print("self",self.name)
-	monoObj=self:GetComponent(typeof(CS.LuaBehaviour))
+	--monoObj=self:GetComponent(typeof(CS.LuaBehaviour))
 	
 	lightCpnt= lightObject:GetComponent(typeof(CS.UnityEngine.Light))
-	monoObj:Test()
+	data=UserData(1,Vector3(1,1,0))
+	--monoObj:Test()
+	self:Test()
 end
 
 function update()
-	local r = Vector3(1,0,0) * CS.UnityEngine.Time.deltaTime * speed
-	self.transform:Rotate(r)
+	--local r = Vector3(1,0,0) * CS.UnityEngine.Time.deltaTime * speed
+	self.transform:Rotate(data.dir*data.speed)
 	lightCpnt.color = CS.UnityEngine.Color(CS.UnityEngine.Mathf.Sin(CS.UnityEngine.Time.time) / 2 + 0.5, 0, 0, 1)
 end
 

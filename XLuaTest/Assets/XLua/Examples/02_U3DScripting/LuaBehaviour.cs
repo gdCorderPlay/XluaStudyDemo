@@ -19,7 +19,7 @@ public class Injection
     public GameObject value;
 }
 
-[LuaCallCSharp]
+//[LuaCallCSharp]
 public class LuaBehaviour : MonoBehaviour {
     /// <summary>
     /// lua 脚本文件
