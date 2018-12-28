@@ -21,13 +21,17 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(TestForLuaChangeAtRuntime);
-			Utils.BeginObjectRegister(type, L, translator, 0, 0, 1, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 2, 2, 2);
+			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetSpeed", _m_SetSpeed);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Logger", _m_Logger);
 			
 			
-			
-			Utils.RegisterFunc(L, Utils.GETTER_IDX, "speed", _g_get_speed);
+			Utils.RegisterFunc(L, Utils.GETTER_IDX, "t", _g_get_t);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "speed", _g_get_speed);
             
-			Utils.RegisterFunc(L, Utils.SETTER_IDX, "speed", _s_set_speed);
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "t", _s_set_t);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "speed", _s_set_speed);
             
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
@@ -73,8 +77,78 @@ namespace XLua.CSObjectWrap
         
         
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetSpeed(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    float __speed = (float)LuaAPI.lua_tonumber(L, 2);
+                    
+                    gen_to_be_invoked.SetSpeed( __speed );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_Logger(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    string _msg = LuaAPI.lua_tostring(L, 2);
+                    
+                    gen_to_be_invoked.Logger( _msg );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         
+        
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_t(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.t);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_speed(RealStatePtr L)
@@ -91,6 +165,21 @@ namespace XLua.CSObjectWrap
         }
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_t(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.t = (UnityEngine.UI.Text)translator.GetObject(L, 2, typeof(UnityEngine.UI.Text));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _s_set_speed(RealStatePtr L)

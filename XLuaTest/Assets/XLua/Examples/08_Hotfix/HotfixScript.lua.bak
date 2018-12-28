@@ -4,4 +4,5 @@
                   print('<<<<<<<<Update in lua, tick = ' .. self.tick )
                    -- print('gd')
                    end
+
                end)

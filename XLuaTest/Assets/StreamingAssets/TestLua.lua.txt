@@ -1,7 +1,8 @@
-local speed=6
+--local speed=6
 add= function (a)
 return a+1
 end
-speed=add(speed)
-self.transform:Rotate(speed*CS.UnityEngine.Vector3.up)
-self.speed=speed
+--speed=add(speed)
+self:SetSpeed(add(self.speed))
+self.transform:Rotate(self.speed*CS.UnityEngine.Vector3.up)
+self:Logger(self.speed)
