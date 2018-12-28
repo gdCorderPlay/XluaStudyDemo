@@ -21,12 +21,14 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(TestForLuaChangeAtRuntime);
-			Utils.BeginObjectRegister(type, L, translator, 0, 0, 0, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 0, 1, 1);
 			
 			
 			
-			
-			
+			Utils.RegisterFunc(L, Utils.GETTER_IDX, "speed", _g_get_speed);
+            
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "speed", _s_set_speed);
+            
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
@@ -74,7 +76,36 @@ namespace XLua.CSObjectWrap
         
         
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_speed(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+                LuaAPI.lua_pushnumber(L, gen_to_be_invoked.speed);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
         
+        
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_speed(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                TestForLuaChangeAtRuntime gen_to_be_invoked = (TestForLuaChangeAtRuntime)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.speed = (float)LuaAPI.lua_tonumber(L, 2);
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
         
 		
 		

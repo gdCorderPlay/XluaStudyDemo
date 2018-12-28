@@ -1,2 +1,7 @@
-print('gd')
-self.transform:Rotate(CS.UnityEngine.Vector3.up)
+local speed=6
+add= function (a)
+return a+1
+end
+speed=add(speed)
+self.transform:Rotate(speed*CS.UnityEngine.Vector3.up)
+self.speed=speed
