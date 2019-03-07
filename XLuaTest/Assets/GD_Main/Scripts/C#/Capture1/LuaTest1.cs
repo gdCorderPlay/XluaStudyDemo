@@ -10,16 +10,13 @@ namespace GDLua
 
     public class LuaTest1 : MonoBehaviour
     {
-
-       
         void Start()
         {
             Lua lua = new Lua();
             //lua.SetFileRootPath("G:");
             lua.SetFileRootPath(Application.streamingAssetsPath + "/Capture1/");
-            // lua.DoFile("Test");
-            Logger("GDDDDDDDDDDDD");
-
+             lua.DoFile("Test");
+           // Logger("GDDDDDDDDDDDD");
 //            LuaEnv lua = new LuaEnv();
 
             //            lua.DoString(@"
