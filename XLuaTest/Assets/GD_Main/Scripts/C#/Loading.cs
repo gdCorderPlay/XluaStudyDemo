@@ -25,7 +25,7 @@ public class Loading : MonoBehaviour {
         //  bundle = AssetBundle.LoadFromFile("file:///D:/Study/GD/XluaStudyDemo/XLuaTest/AssetBundles/prefab");
       GameObject obj =     bundle.LoadAsset("cube") as GameObject;
 
-        GameObject instanceObj = Instantiate(obj);
+        /*GameObject instanceObj = */Instantiate(obj);
 
        StartCoroutine(loadasset("http://localhost/HotfixAsset/Version.txt")) ;
     }

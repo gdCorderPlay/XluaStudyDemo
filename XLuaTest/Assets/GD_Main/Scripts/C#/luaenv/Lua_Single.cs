@@ -6,7 +6,9 @@ public class Lua_Single : Singleton<Lua_Single> {
 
 	public void Show()
     {
-        Debug.Log("lua single");
+      
     }
     
+   
+
 }

@@ -36,9 +36,12 @@ public class InvokeLua : MonoBehaviour
                 local calc_mt = {
                     __index = {
                         Add = function(self, a, b)
-                            return (a + b) * self.Mult
+                            return (a + b+b) * self.Mult
                         end,
-                        
+                        Sum = function(self, a, b)
+                            return (a + b) +self.Mult
+                        end,                        
+
                         get_Item = function(self, index)
                             return self.list[index + 1]
                         end,
@@ -96,10 +99,11 @@ public class InvokeLua : MonoBehaviour
         luaenv.DoString(script);
         CalcNew calc_new = luaenv.Global.GetInPath<CalcNew>("Calc.New");
         ICalc calc = calc_new(10, "hi", "john"); //constructor
+      //  Debug.Log("sum+mult =" + calc.Sum(1, 2));
         Debug.Log("sum(*10) =" + calc.Add(1, 2));
         calc.Mult = 100;
         Debug.Log("sum(*100)=" + calc.Add(1, 2));
-
+      //  Debug.Log("sum+mult =" + calc.Sum(1, 2));
         Debug.Log("list[0]=" + calc[0]);
         Debug.Log("list[1]=" + calc[1]);
         

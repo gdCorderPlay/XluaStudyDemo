@@ -580,7 +580,7 @@ namespace XLua
         {
             customLoaders.Add(loader);
         }
-
+     
         internal Dictionary<string, LuaCSFunction> buildin_initer = new Dictionary<string, LuaCSFunction>();
 
         public void AddBuildin(string name, LuaCSFunction initer)
