@@ -279,7 +279,10 @@ print(v)
 end
 
        ";
-
+        public const string Lua_LeadstringFunction = @"
+         f=loadstring('i=1 a= function(b) return b+1 end i = a(1) print(i)')
+         f()
+";
 
         public static List<string> scripts = new List<string>() {
             Lua_IntCapture,//int 0
@@ -301,6 +304,7 @@ end
             Lua_RemoveFunction,//删除表中的指定元素 16
             Lua_CountFunction,//计数器 17
             Lua_IterateFunction,//迭代器 18
+            Lua_LeadstringFunction,//loadstring 19
         };
 
 
